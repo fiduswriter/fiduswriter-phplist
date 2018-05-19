@@ -19,7 +19,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             'login': settings.PHPLIST_LOGIN,
             'password': settings.PHPLIST_PASSWORD
         }
-        if settings.PHPLIST_SECRET:
+        if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
         http.fetch(
@@ -57,7 +57,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             'htmlemail': 1,
             'disabled': 0
         }
-        if settings.PHPLIST_SECRET:
+        if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
         http.fetch(
@@ -84,7 +84,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             'list_id': settings.PHPLIST_LIST_ID,
             'subscriber_id': subscriber_id
         }
-        if settings.PHPLIST_SECRET:
+        if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
         http.fetch(
