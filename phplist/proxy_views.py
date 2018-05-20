@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from tornado.web import RequestHandler, asynchronous
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.escape import json_decode
