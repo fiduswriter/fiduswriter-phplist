@@ -18,11 +18,11 @@ export class ConfirmAccountPHPList {
         )
         this.confirmAccount.confirmMethods.push(
             () => {
-                let emailListRadio = document.querySelector('input[name=emaillist]:checked')
+                const emailListRadio = document.querySelector('input[name=emaillist]:checked')
                 if (!emailListRadio || emailListRadio.value==='no') {
                     return
                 }
-                let email = this.confirmAccount.confirmationData.email
+                const email = this.confirmAccount.confirmationData.email
                 return post(
                     '/proxy/phplist/subscribe_email',
                     {email}

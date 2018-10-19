@@ -1,7 +1,3 @@
-from __future__ import unicode_literals
-from future.standard_library import install_aliases
-install_aliases()
-
 from tornado.web import RequestHandler, asynchronous
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.escape import json_decode
