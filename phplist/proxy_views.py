@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from allauth.account.models import EmailAddress
 
+
 class Proxy(DjangoHandlerMixin, RequestHandler):
     @asynchronous
     def post(self, relative_url):
