@@ -3,8 +3,8 @@ import {post} from "../common"
 import {formQuestion} from "./templates"
 
 export class ConfirmAccountPHPList {
-    constructor(confirmAccount) {
-        this.confirmAccount = confirmAccount
+    constructor({page}) {
+        this.confirmAccount = page
     }
 
     init() {

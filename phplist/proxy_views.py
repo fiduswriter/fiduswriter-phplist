@@ -1,4 +1,4 @@
-from tornado.web import RequestHandler, asynchronous
+from tornado.web import RequestHandler
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.escape import json_decode
 from base.django_handler_mixin import DjangoHandlerMixin
@@ -8,13 +8,13 @@ from allauth.account.models import EmailAddress
 
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
-    @asynchronous
+
     def post(self, relative_url):
         self.url = settings.PHPLIST_BASE_URL + '/admin/?page=call&pi=restapi'
         self.relative_url = relative_url
         self.login()
 
-    def login(self):
+    async def login(self):
         post_data = {
             'cmd': 'login',
             'login': settings.PHPLIST_LOGIN,
@@ -23,17 +23,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
-        http.fetch(
+        response = await http.fetch(
             HTTPRequest(
                 self.url,
                 'POST',
                 None,
                 urlencode(post_data)
-            ),
-            callback=self.process_request
+            )
         )
-
-    def process_request(self, response):
         if response.error:
             response.rethrow()
         self.session_cookie = response.headers['Set-Cookie']
@@ -44,7 +41,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             self.finish()
             return
 
-    def subscribe_email(self):
+    async def subscribe_email(self):
         email = self.get_argument('email')
         email_object = EmailAddress.objects.filter(email=email).first()
         if not email_object:
@@ -61,17 +58,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
-        http.fetch(
+        response = await http.fetch(
             HTTPRequest(
                 self.url,
                 'POST',
                 {'Cookie': self.session_cookie},
                 urlencode(post_data)
-            ),
-            callback=self.add_email_to_list
+            )
         )
-
-    def add_email_to_list(self, response):
         if response.error:
             response.rethrow()
         response_json = json_decode(response.body)
@@ -88,17 +82,14 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
         if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
-        http.fetch(
+        response = await http.fetch(
             HTTPRequest(
                 self.url,
                 'POST',
                 {'Cookie': self.session_cookie},
                 urlencode(post_data)
-            ),
-            callback=self.respond_to_client
+            )
         )
-
-    def respond_to_client(self, response):
         if response.error:
             response.rethrow()
         self.finish()
