@@ -1,7 +1,7 @@
 import os
 from setuptools import find_namespace_packages, setup
 
-with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
+with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -14,6 +14,7 @@ setup(
     license='AGPL License',
     description='A Fidus Writer plugin to integrate with an emaillist using PHPList.',
     long_description=README,
+    long_description_content_type='text/markdown',
     url='https://www.github.com/fiduswriter/fiduswriter-phplist',
     author='Johannes Wilm',
     author_email='johannes@fiduswriter.org',
