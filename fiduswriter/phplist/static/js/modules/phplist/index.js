@@ -3,8 +3,8 @@ import {post} from "../common"
 import {formQuestion} from "./templates"
 
 export class ConfirmAccountPHPList {
-    constructor(confirmAccount) {
-        this.confirmAccount = confirmAccount
+    constructor({page}) {
+        this.confirmAccount = page
     }
 
     init() {
@@ -22,7 +22,7 @@ export class ConfirmAccountPHPList {
                 if (!emailListRadio || emailListRadio.value==='no') {
                     return
                 }
-                const email = this.confirmAccount.confirmationData.email
+                const email = this.confirmAccount.email
                 return post(
                     '/proxy/phplist/subscribe_email',
                     {email}
