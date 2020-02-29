@@ -5,6 +5,7 @@ from base.django_handler_mixin import DjangoHandlerMixin
 from urllib.parse import urlencode
 from django.conf import settings
 from allauth.account.models import EmailAddress
+from urllib.parse import urljoin
 
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
@@ -12,7 +13,10 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     async def post(self, relative_url):
         if not hasattr(settings, 'PHPLIST_BASE_URL'):
             self.finish()
-        self.url = settings.PHPLIST_BASE_URL + '/admin/?page=call&pi=restapi'
+        self.url = urljoin(
+            settings.PHPLIST_BASE_URL,
+            '/admin/?page=call&pi=restapi'
+        )
         self.relative_url = relative_url
         await self.login()
 
@@ -35,16 +39,16 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
                 )
             )
         except ConnectionRefusedError:
-            self.set_status(200)
+            self.set_status(404)
             self.finish()
             return
         if response.error:
-            self.set_status(200)
+            self.set_status(404)
             self.finish()
             return
         self.session_cookie = response.headers['Set-Cookie']
         if self.relative_url == 'subscribe_email':
-            self.subscribe_email()
+            await self.subscribe_email()
         else:
             self.set_status(401)
             self.finish()
