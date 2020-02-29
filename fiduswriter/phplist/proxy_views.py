@@ -9,12 +9,12 @@ from allauth.account.models import EmailAddress
 
 class Proxy(DjangoHandlerMixin, RequestHandler):
 
-    def post(self, relative_url):
+    async def post(self, relative_url):
         if not hasattr(settings, 'PHPLIST_BASE_URL'):
             self.finish()
         self.url = settings.PHPLIST_BASE_URL + '/admin/?page=call&pi=restapi'
         self.relative_url = relative_url
-        self.login()
+        await self.login()
 
     async def login(self):
         post_data = {
@@ -22,22 +22,26 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
             'login': settings.PHPLIST_LOGIN,
             'password': settings.PHPLIST_PASSWORD
         }
-        print('FIX')
-        print(settings.PHPLIST_BASE_URL)
-        print('FAX')
         if hasattr(settings, 'PHPLIST_SECRET'):
             post_data['secret'] = settings.PHPLIST_SECRET
         http = AsyncHTTPClient()
-        response = await http.fetch(
-            HTTPRequest(
-                self.url,
-                'POST',
-                None,
-                urlencode(post_data)
+        try:
+            response = await http.fetch(
+                HTTPRequest(
+                    self.url,
+                    'POST',
+                    None,
+                    urlencode(post_data)
+                )
             )
-        )
+        except ConnectionRefusedError:
+            self.set_status(200)
+            self.finish()
+            return
         if response.error:
-            response.rethrow()
+            self.set_status(200)
+            self.finish()
+            return
         self.session_cookie = response.headers['Set-Cookie']
         if self.relative_url == 'subscribe_email':
             self.subscribe_email()
