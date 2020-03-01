@@ -179,7 +179,7 @@ class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
         submit_button.click()
         if signed_up:
             self.assertInfoAlert("Subscribed to email list")
-        WebDriverWait(driver, 10000).until(
+        WebDriverWait(driver, self.wait_time).until(
             EC.staleness_of(submit_button)
         )
         self.assertEqual(
