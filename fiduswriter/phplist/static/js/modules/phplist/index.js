@@ -1,4 +1,4 @@
-import {post} from "../common"
+import {post, addAlert, deactivateWait} from "../common"
 
 import {formQuestion} from "./templates"
 
@@ -26,6 +26,17 @@ export class ConfirmAccountPHPList {
                 return post(
                     '/proxy/phplist/subscribe_email',
                     {email}
+                ).then(
+                    () => {
+                        deactivateWait()
+                        if (emailListRadio) {
+                            addAlert('info', gettext('Subscribed to email list'))
+                        }
+                        // Wait while message is shown
+                        return new Promise(resolve => setTimeout(() => resolve(), 3000))
+                    }
+                ).catch(
+                    error => console.error(error)
                 )
             }
         )
