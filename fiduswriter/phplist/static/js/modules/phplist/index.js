@@ -19,7 +19,7 @@ export class ConfirmAccountPHPList {
         this.confirmAccount.confirmMethods.push(
             () => {
                 const emailListRadio = document.querySelector('input[name=emaillist]:checked')
-                if (!emailListRadio || emailListRadio.value==='no') {
+                if (!emailListRadio || emailListRadio.value === 'no') {
                     return
                 }
                 const email = this.confirmAccount.email
