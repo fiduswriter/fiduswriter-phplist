@@ -39,8 +39,8 @@ jobs:
           then pip install https://github.com/fiduswriter/fiduswriter/archive/develop.zip;
           else pip install https://github.com/fiduswriter/fiduswriter/archive/main.zip;
         fi
-        coverage run fiduswriter setup --no-static
-        fiduswriter lint
+        coverage run $(which fiduswriter) setup --no-static
+        $(which fiduswriter) lint
     - name: Run test phplist
       uses: nick-invision/retry@v2
       with:
@@ -49,7 +49,7 @@ jobs:
         retry_on: error
         command: |
           cd fiduswriter
-          coverage run fiduswriter test phplist
+          coverage run $(which fiduswriter) test phplist
     - name: Coveralls
       run: |
           cd fiduswriter
