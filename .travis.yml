@@ -23,7 +23,7 @@ install:
     - pip3 install pip --upgrade
     - if grep version setup.py | grep -q "dev";
       then pip3 install https://github.com/fiduswriter/fiduswriter/archive/develop.zip;
-      else pip3 install https://github.com/fiduswriter/fiduswriter/archive/master.zip;
+      else pip3 install https://github.com/fiduswriter/fiduswriter/archive/main.zip;
       fi
     - cd fiduswriter
     - mv ../travis/configuration.py ./
