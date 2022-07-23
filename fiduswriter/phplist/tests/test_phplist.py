@@ -136,11 +136,11 @@ class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
 
     def signup(self, driver, list=False, signed_up=False):
         driver.get(urljoin(self.base_url, "/account/sign-up/"))
-        driver.find_element_by_id("id_username").send_keys("username_no")
-        driver.find_element_by_id("id_password1").send_keys("password")
-        driver.find_element_by_id("id_password2").send_keys("password")
-        driver.find_element_by_id("id_email").send_keys("my.no@email.com")
-        driver.find_element_by_id("signup-submit").click()
+        driver.find_element(By.ID, "id-username").send_keys("username_no")
+        driver.find_element(By.ID, "id-password1").send_keys("password")
+        driver.find_element(By.ID, "id-password2").send_keys("password")
+        driver.find_element(By.ID, "id-email").send_keys("my.no@email.com")
+        driver.find_element(By.ID, "signup-submit").click()
         time.sleep(1)
         signup_link = self.find_urls(mail.outbox[-1].body)[0]
         driver.get(signup_link)
@@ -162,6 +162,6 @@ class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
             EC.staleness_of(submit_button)
         )
         self.assertEqual(
-            driver.find_element_by_css_selector(".fw-contents h1").text,
+            driver.find_element(By.CSS_SELECTOR, ".fw-contents h1").text,
             "Thanks for verifying!",
         )
