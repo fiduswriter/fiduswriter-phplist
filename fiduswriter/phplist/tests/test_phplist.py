@@ -15,6 +15,8 @@ from testing.testcases import LiveTornadoTestCase
 from testing.selenium_helper import SeleniumHelper
 
 from django.core import mail
+from django.test import override_settings
+from django.conf import settings
 
 
 # From https://realpython.com/testing-third-party-apis-with-mock-servers/
@@ -93,23 +95,33 @@ class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
         cls.server.terminate()
         super().tearDownClass()
 
+    @override_settings()
     def test_signup_yes_not_available(self):
-        self.signup(self.driver, True)
+        del settings.PHPLIST_BASE_URL
+        self.signup(self.driver, True, False, False)
 
+    @override_settings()
     def test_signup_no_not_available(self):
-        self.signup(self.driver, False)
+        del settings.PHPLIST_BASE_URL
+        self.signup(self.driver, False, False, False)
 
     def test_signup_no_available(self):
         with self.settings(
-            PHPLIST_BASE_URL="http://localhost:{}/".format(self.server_port)
+            PHPLIST_BASE_URL="http://localhost:{}/".format(self.server_port),
+            PHPLIST_LOGIN="login",
+            PHPLIST_PASSWORD="password",
+            PHPLIST_LIST_ID="1",
         ):
-            self.signup(self.driver, False)
+            self.signup(self.driver, False, False, True)
 
     def test_signup_yes_available(self):
         with self.settings(
-            PHPLIST_BASE_URL="http://localhost:{}/".format(self.server_port)
+            PHPLIST_BASE_URL="http://localhost:{}/".format(self.server_port),
+            PHPLIST_LOGIN="login",
+            PHPLIST_PASSWORD="password",
+            PHPLIST_LIST_ID="1",
         ):
-            self.signup(self.driver, True, True)
+            self.signup(self.driver, True, True, True)
 
     def assertInfoAlert(self, message):
         i = 0
@@ -134,12 +146,16 @@ class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
                 continue
         self.assertTrue(message_found)
 
-    def signup(self, driver, list=False, signed_up=False):
+    def signup(self, driver, list=False, signed_up=False, setting=False):
         driver.get(urljoin(self.base_url, "/account/sign-up/"))
-        driver.find_element(By.ID, "id-username").send_keys("username_no")
+        driver.find_element(By.ID, "id-username").send_keys(
+            f"username_{list}_{signed_up}_{setting}"
+        )
         driver.find_element(By.ID, "id-password1").send_keys("password")
         driver.find_element(By.ID, "id-password2").send_keys("password")
-        driver.find_element(By.ID, "id-email").send_keys("my.no@email.com")
+        driver.find_element(By.ID, "id-email").send_keys(
+            f"my.no.{list}.{signed_up}.{setting}@email.com"
+        )
         driver.find_element(By.ID, "signup-submit").click()
         time.sleep(1)
         signup_link = self.find_urls(mail.outbox[-1].body)[0]

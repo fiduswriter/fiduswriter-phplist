@@ -12,6 +12,7 @@ class Proxy(DjangoHandlerMixin, RequestHandler):
     async def post(self, relative_url):
         if not hasattr(settings, "PHPLIST_BASE_URL"):
             self.finish()
+            return
         self.url = urljoin(
             settings.PHPLIST_BASE_URL, "/admin/?page=call&pi=restapi"
         )
