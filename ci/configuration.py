@@ -1,4 +1,4 @@
-INSTALLED_APPS = ['phplist']
+INSTALLED_APPS = ["phplist"]
 
 PHPLIST_BASE_URL = "http://localhost:9999/"
 PHPLIST_LOGIN = "login"
