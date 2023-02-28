@@ -149,12 +149,12 @@ class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
     def signup(self, driver, list=False, signed_up=False, setting=False):
         driver.get(urljoin(self.base_url, "/account/sign-up/"))
 
-        driver.find_element(By.ID, "id_username").send_keys(
+        driver.find_element(By.ID, "id-username").send_keys(
             f"username_{list}_{signed_up}_{setting}"
         )
-        driver.find_element(By.ID, "id_password1").send_keys("password")
-        driver.find_element(By.ID, "id_password2").send_keys("password")
-        driver.find_element(By.ID, "id_email").send_keys(
+        driver.find_element(By.ID, "id-password1").send_keys("password")
+        driver.find_element(By.ID, "id-password2").send_keys("password")
+        driver.find_element(By.ID, "id-email").send_keys(
             f"my.no.{list}.{signed_up}.{setting}@email.com"
         )
         driver.find_element(By.ID, "signup-submit").click()

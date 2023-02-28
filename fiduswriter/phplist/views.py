@@ -3,7 +3,7 @@ from httpx import AsyncClient, HTTPError
 from asgiref.sync import async_to_sync, sync_to_async
 from urllib.parse import urljoin
 
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.conf import settings
 
@@ -11,7 +11,7 @@ from allauth.account.models import EmailAddress
 
 
 @sync_to_async
-@require_GET
+@require_POST
 @async_to_sync
 async def subscribe_email(request):
     if not hasattr(settings, "PHPLIST_BASE_URL"):
@@ -31,7 +31,7 @@ async def subscribe_email(request):
     except HTTPError:
         return HttpResponse(status=404)
     session_cookie = response.headers["Set-Cookie"]
-    email = request.GET["email"]
+    email = request.POST["email"]
     email_object = EmailAddress.objects.filter(email=email).first()
     if not email_object:
         return HttpResponse(status=500)
