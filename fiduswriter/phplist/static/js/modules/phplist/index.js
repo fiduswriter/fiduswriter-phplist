@@ -24,7 +24,7 @@ export class ConfirmAccountPHPList {
                 }
                 const email = this.confirmAccount.email
                 return post(
-                    "/proxy/phplist/subscribe_email",
+                    "/api/phplist/subscribe_email/",
                     {email}
                 ).then(
                     () => {
