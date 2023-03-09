@@ -69,7 +69,12 @@ async def subscribe_email(request):
         subscriber_add_data["secret"] = settings.PHPLIST_SECRET
     async with AsyncClient() as client:
         response = await client.post(
-            url, headers={"Cookie": session_cookie}, data=subscriber_add_data
+            url,
+            headers={
+                "Cookie": session_cookie,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            data=urlencode(subscriber_add_data),
         )
         response.raise_for_status()
     return HttpResponse(status=201)
