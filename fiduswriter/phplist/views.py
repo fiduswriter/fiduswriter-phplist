@@ -1,7 +1,7 @@
 import json
 from httpx import AsyncClient, HTTPError
 from asgiref.sync import async_to_sync, sync_to_async
-from urllib.parse import urljoin
+from urllib.parse import urlencode, urljoin
 
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
@@ -47,7 +47,12 @@ async def subscribe_email(request):
         data["secret"] = settings.PHPLIST_SECRET
     async with AsyncClient() as client:
         response = await client.post(
-            url, headers={"Cookie": session_cookie}, data=data
+            url,
+            headers={
+                "Cookie": session_cookie,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            content=urlencode(data),
         )
         response.raise_for_status()
     response_json = json.loads(response.content)
