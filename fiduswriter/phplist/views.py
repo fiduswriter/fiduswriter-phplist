@@ -1,4 +1,3 @@
-import json
 import re
 from httpx import AsyncClient, HTTPError
 from asgiref.sync import async_to_sync, sync_to_async
@@ -31,7 +30,6 @@ async def subscribe_email(request):
                 url,
                 params={"page": "importsimple"},
                 headers={
-                    "Accept": "application/json",
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
                 content=urlencode(login_data),
@@ -68,7 +66,6 @@ async def subscribe_email(request):
             url,
             params={"page": "importsimple"},
             headers={
-                "Accept": "application/json",
                 "Cookie": session_cookie,
                 "Content-Type": "application/x-www-form-urlencoded",
             },

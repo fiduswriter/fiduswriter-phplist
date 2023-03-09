@@ -1,5 +1,4 @@
 import time
-import json
 import multiprocessing
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
@@ -22,7 +21,7 @@ from django.conf import settings
 # From https://realpython.com/testing-third-party-apis-with-mock-servers/
 class MockServerRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
-        if self.path != "/admin/?page=call&pi=restapi":
+        if self.path != "/admin/?page=importsimple":
             self.send_response(requests.codes.not_found)
             self.end_headers()
             return
@@ -34,23 +33,23 @@ class MockServerRequestHandler(BaseHTTPRequestHandler):
                 "CONTENT_TYPE": self.headers["Content-Type"],
             },
         )
-        cmd = form["cmd"].value
-        if cmd == "login":
+        if "cmd" in form and form["cmd"].value == "login":
             self.send_response(requests.codes.ok)
             self.send_header("Set-Cookie", "fish=2000")
             self.end_headers()
-        elif cmd == "subscriberAdd":
-            self.send_response(requests.codes.ok)
-            self.send_header("Content-Type", "application/json")
-            self.end_headers()
             self.wfile.write(
-                json.dumps({"status": "OK", "data": {"id": 19}}).encode(
-                    encoding="utf_8"
+                '<html><head></head><body><input type="hidden" name="formtoken" value="1f2342432j4bn3b237114" /></body></html>'.encode(
+                    "utf-8"
                 )
             )
-        elif cmd == "listSubscriberAdd":
+        elif "importcontent" in form:
             self.send_response(requests.codes.ok)
             self.end_headers()
+            self.wfile.write(
+                "<html><head></head><body>Email has been subscribed!</body></html>".encode(
+                    "utf-8"
+                )
+            )
         else:
             self.send_response(requests.codes.not_found)
             self.end_headers()
