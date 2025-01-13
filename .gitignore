@@ -14,3 +14,5 @@ fiduswriter/.coveragerc
 fiduswriter/configuration.py
 fiduswriter/fiduswriter.sql
 fiduswriter/screenshots
+.direnv/
+.envrc

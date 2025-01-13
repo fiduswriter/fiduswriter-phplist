@@ -10,7 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
-from testing.testcases import LiveTornadoTestCase
+from channels.testing import ChannelsLiveServerTestCase
 from testing.selenium_helper import SeleniumHelper
 
 from django.core import mail
@@ -64,7 +64,7 @@ def get_free_port():
     return port
 
 
-class PHPlistTest(LiveTornadoTestCase, SeleniumHelper):
+class PHPlistTest(SeleniumHelper, ChannelsLiveServerTestCase):
     fixtures = ["initial_documenttemplates.json", "initial_styles.json"]
 
     @classmethod
