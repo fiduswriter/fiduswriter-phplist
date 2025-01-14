@@ -45,7 +45,11 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install libjpeg-dev python3-dev python3-pip gettext zlib1g-dev git nodejs build-essential
+        sudo apt install libjpeg-dev gettext zlib1g-dev git build-essential
+        if grep version pyproject.toml | grep -q "dev";
+          then pip install https://github.com/fiduswriter/fiduswriter/archive/develop.zip;
+          else pip install https://github.com/fiduswriter/fiduswriter/archive/main.zip;
+        fi
         cd fiduswriter
         mv ../ci/configuration.py ./
         pip install requests[security]
@@ -56,10 +60,6 @@ jobs:
         pip install webdriver-manager
         pip install wheel
         pip install pip --upgrade
-        if grep version pyproject.toml | grep -q "dev";
-          then pip install https://github.com/fiduswriter/fiduswriter/archive/develop.zip;
-          else pip install https://github.com/fiduswriter/fiduswriter/archive/main.zip;
-        fi
         coverage run $(which fiduswriter) setup --no-static
     - name: Run test phplist
       uses: nick-invision/retry@v2
