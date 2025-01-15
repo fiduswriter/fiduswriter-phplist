@@ -14,7 +14,10 @@ from allauth.account.models import EmailAddress
 @require_POST
 @async_to_sync
 async def subscribe_email(request):
-    if not hasattr(settings, "PHPLIST_BASE_URL"):
+    if (
+        not hasattr(settings, "PHPLIST_BASE_URL")
+        or not settings.PHPLIST_BASE_URL
+    ):
         return HttpResponse()
     url = urljoin(settings.PHPLIST_BASE_URL, "/admin/")
     login_data = {
@@ -36,7 +39,7 @@ async def subscribe_email(request):
             )
             response.raise_for_status()
     except HTTPError:
-        return HttpResponse(status=404)
+        return HttpResponse(status=500)
     # <input type="hidden" name="formtoken" value="1f...114" />
     session_cookie = response.headers["Set-Cookie"]
     formtoken_match = re.search(
@@ -47,7 +50,7 @@ async def subscribe_email(request):
         return HttpResponse(status=404)
     formtoken = formtoken_match.group(1)
     email = request.POST["email"]
-    email_object = EmailAddress.objects.filter(email=email).first()
+    email_object = await EmailAddress.objects.filter(email=email).afirst()
     if not email_object:
         return HttpResponse(status=500)
     data = {
