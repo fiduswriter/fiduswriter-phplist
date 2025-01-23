@@ -1,6 +1,5 @@
 import re
 from httpx import AsyncClient, HTTPError
-from asgiref.sync import async_to_sync, sync_to_async
 from urllib.parse import urlencode, urljoin
 
 from django.views.decorators.http import require_POST
@@ -10,9 +9,7 @@ from django.conf import settings
 from allauth.account.models import EmailAddress
 
 
-@sync_to_async
 @require_POST
-@async_to_sync
 async def subscribe_email(request):
     if (
         not hasattr(settings, "PHPLIST_BASE_URL")
