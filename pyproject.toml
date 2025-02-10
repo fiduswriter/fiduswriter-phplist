@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fiduswriter-phplist"
 description = "A Fidus Writer plugin to integrate with an emaillist using PHPList."
-version = "3.12.0-dev"
+version = "4.0.0rc1"
 readme = "README.md"
 license = {text = "AGPL-3.0-or-later"}
 authors = [
