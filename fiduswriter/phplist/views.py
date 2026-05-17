@@ -46,7 +46,7 @@ async def subscribe_email(request):
     if not formtoken_match:
         return HttpResponse(status=404)
     formtoken = formtoken_match.group(1)
-    email = request.POST["email"]
+    email = request.JSON["email"]
     email_object = await EmailAddress.objects.filter(email=email).afirst()
     if not email_object:
         return HttpResponse(status=500)

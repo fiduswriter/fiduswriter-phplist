@@ -140,8 +140,8 @@ class PHPlistTestNotAvailable(SeleniumHelper, ChannelsLiveServerTestCase):
         driver.find_element(By.ID, "id-username").send_keys(
             f"username_{list}_{signed_up}_{setting}"
         )
-        driver.find_element(By.ID, "id-password1").send_keys("password")
-        driver.find_element(By.ID, "id-password2").send_keys("password")
+        driver.find_element(By.ID, "id-password1").send_keys("verysecret245")
+        driver.find_element(By.ID, "id-password2").send_keys("verysecret245")
         driver.find_element(By.ID, "id-email").send_keys(
             f"my.no.{list}.{signed_up}.{setting}@email.com"
         )
@@ -177,7 +177,7 @@ class PHPlistTestNotAvailable(SeleniumHelper, ChannelsLiveServerTestCase):
 @override_settings(EMAIL_BACKEND="testing.mail.EmailBackend")
 @override_settings(PHPLIST_BASE_URL="http://localhost:{}/".format(SERVER_PORT))
 @override_settings(PHPLIST_LOGIN="login")
-@override_settings(PHPLIST_PASSWORD="password")
+@override_settings(PHPLIST_PASSWORD="verysecret245")
 @override_settings(PHPLIST_LIST_ID="1")
 class PHPlistTestAvailable(SeleniumHelper, ChannelsLiveServerTestCase):
     fixtures = ["initial_documenttemplates.json", "initial_styles.json"]
@@ -253,8 +253,8 @@ class PHPlistTestAvailable(SeleniumHelper, ChannelsLiveServerTestCase):
         driver.find_element(By.ID, "id-username").send_keys(
             f"username_{list}_{signed_up}_{setting}"
         )
-        driver.find_element(By.ID, "id-password1").send_keys("password")
-        driver.find_element(By.ID, "id-password2").send_keys("password")
+        driver.find_element(By.ID, "id-password1").send_keys("verysecret245")
+        driver.find_element(By.ID, "id-password2").send_keys("verysecret245")
         driver.find_element(By.ID, "id-email").send_keys(
             f"my.no.{list}.{signed_up}.{setting}@email.com"
         )
