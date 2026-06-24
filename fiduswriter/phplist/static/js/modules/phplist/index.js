@@ -1,4 +1,4 @@
-import {addAlert, deactivateWait, post} from "../common"
+import {addAlert, deactivateWait, post} from "fwtoolkit"
 
 import {formQuestion} from "./templates"
 
