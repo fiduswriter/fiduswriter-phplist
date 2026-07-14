@@ -120,7 +120,7 @@ class PHPlistTestNotAvailable(SeleniumHelper, ChannelsLiveServerTestCase):
                 if (
                     self.driver.find_element(
                         By.CSS_SELECTOR,
-                        "body #alerts-outer-wrapper .alerts-info",
+                        "body #fw-alerts-outer-wrapper .alerts-info",
                     ).text
                     == message
                 ):
@@ -233,7 +233,7 @@ class PHPlistTestAvailable(SeleniumHelper, ChannelsLiveServerTestCase):
                 if (
                     self.driver.find_element(
                         By.CSS_SELECTOR,
-                        "body #alerts-outer-wrapper .alerts-info",
+                        "body #fw-alerts-outer-wrapper .alerts-info",
                     ).text
                     == message
                 ):
