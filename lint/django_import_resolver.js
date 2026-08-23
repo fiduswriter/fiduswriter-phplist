@@ -16,11 +16,23 @@ function getFidusWriterPath() {
             return fwPath
         }
         throw new Error("Fidus Writer not found")
-    } catch (error) {
-        console.error(
-            "Failed to find Fidus Writer installation:",
-            error.message
+    } catch {
+        // New repository layout: the Django sources live in their own
+        // fiduswriter-server-backend repository checked out as a sibling.
+        const backendCore = path.resolve(
+            __dirname,
+            "..",
+            "..",
+            "fiduswriter-server-backend",
+            "fiduswriter"
         )
+        if (
+            fs.existsSync(backendCore) &&
+            fs.statSync(backendCore).isDirectory()
+        ) {
+            return backendCore
+        }
+        console.error("Failed to find Fidus Writer installation.")
         process.exit(1)
     }
 }
